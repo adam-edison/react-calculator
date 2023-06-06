@@ -66,6 +66,13 @@ describe('<Calculator />', () => {
     expect(calculated).toBeInTheDocument();
   });
 
+  it('defaults to 0 value when loaded', () => {
+    render(<Calculator />);
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0');
+  });
+
   it('does not display an operation when clicked', () => {
     render(<Calculator />);
 
@@ -78,7 +85,7 @@ describe('<Calculator />', () => {
       fireEvent.click(element);
 
       const calculated = screen.getByRole('presentation');
-      expect(calculated).toHaveValue('');
+      expect(calculated).toHaveValue('0');
     });
   });
 });

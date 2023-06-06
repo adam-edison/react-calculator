@@ -29,7 +29,7 @@ const rows: CalculatorSymbol[][] = [
 const empty = '';
 
 export const Calculator = () => {
-  const [value, setValue] = useState<string>(empty);
+  const [value, setValue] = useState<string>('0');
 
   return (
     <div>
@@ -66,6 +66,10 @@ export function handleClick(
   setValue: Function,
 ) {
   const isNumeric = /[0-9]/.test(String(symbol));
+
+  if (isNumeric && value === '0') {
+    value = empty;
+  }
 
   if (isNumeric) {
     setValue(`${value}${symbol}`);
