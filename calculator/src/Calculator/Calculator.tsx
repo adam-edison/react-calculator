@@ -65,5 +65,10 @@ export function handleClick(
   value: string,
   setValue: Function,
 ) {
-  setValue(`${value}${symbol}`);
+  const isNumeric = /[0-9]/.test(String(symbol));
+  console.log({ symbol, isNumeric });
+
+  if (isNumeric) {
+    setValue(`${value}${symbol}`);
+  }
 }

@@ -65,4 +65,20 @@ describe('<Calculator />', () => {
     const calculated = screen.getByDisplayValue('9876543210');
     expect(calculated).toBeInTheDocument();
   });
+
+  it('does not display an operation when clicked', () => {
+    render(<Calculator />);
+
+    // OK with coupling here
+    // equivalent statement: all numbers enumerated in the app should be usable as buttons
+    const operations = Array.from(SymbolValues);
+
+    operations.forEach((n) => {
+      const element = screen.getByText(n);
+      fireEvent.click(element);
+
+      const calculated = screen.getByRole('presentation');
+      expect(calculated).toHaveValue('');
+    });
+  });
 });
