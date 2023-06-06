@@ -73,6 +73,28 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('0');
   });
 
+  it('ignores single leading 0', () => {
+    render(<Calculator />);
+
+    const element = screen.getByText('0');
+    fireEvent.click(element);
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0');
+  });
+
+  it('ignores multiple leading 0s', () => {
+    render(<Calculator />);
+
+    const element = screen.getByText('0');
+    fireEvent.click(element);
+    fireEvent.click(element);
+    fireEvent.click(element);
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0');
+  });
+
   it('does not display an operation when clicked', () => {
     render(<Calculator />);
 
