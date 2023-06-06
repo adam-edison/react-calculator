@@ -14,6 +14,8 @@ export const SymbolValues = [
   '=',
 ] as const;
 
+export type Operation = (typeof SymbolValues)[number];
+
 export type CalculatorSymbol =
   | (typeof NumberValues)[number]
   | (typeof SymbolValues)[number];
@@ -33,52 +35,42 @@ const empty = '';
 export const Calculator = () => {
   const [current, setCurrent] = useState<string>('0');
 
+  function handleClick(symbol: CalculatorSymbol) {
+    if (symbol === 'C') {
+      setCurrent('0');
+      return;
+    }
+
+    const isNumeric = /[0-9]/.test(String(symbol));
+
+    if (isNumeric && current === '0') {
+      setCurrent(`${symbol}`);
+      return;
+    }
+
+    if (isNumeric) {
+      setCurrent(`${current}${symbol}`);
+    }
+  }
+
   return (
     <div>
       <h1>Calculator</h1>
       <input type="text" value={current} role="presentation" disabled />
-      <div role="grid">
-        {rows.map((row) => buttonRow(row, current, setCurrent))}
-      </div>
+      <div role="grid">{rows.map((row) => buttonRow(row, handleClick))}</div>
     </div>
   );
 };
 
-const buttonRow = (
-  row: CalculatorSymbol[],
-  current: string,
-  setCurrent: Function,
-) => {
+/// TODO: maybe extract this as a separate component?
+const buttonRow = (row: CalculatorSymbol[], onClick: Function) => {
   return (
     <div role="row" key={row.toString()}>
       {row.map((n) => (
-        <button
-          key={`button${n}`}
-          onClick={() => handleClick(n, current, setCurrent)}>
+        <button key={`button${n}`} onClick={() => onClick(n)}>
           {String(n)}
         </button>
       ))}
     </div>
   );
 };
-
-export function handleClick(
-  symbol: CalculatorSymbol,
-  current: string,
-  setCurrent: Function,
-) {
-  if (symbol === 'C') {
-    setCurrent('0');
-    return;
-  }
-
-  const isNumeric = /[0-9]/.test(String(symbol));
-
-  if (isNumeric && current === '0') {
-    current = empty;
-  }
-
-  if (isNumeric) {
-    setCurrent(`${current}${symbol}`);
-  }
-}
