@@ -1,4 +1,17 @@
-const rows: number[][] = [[7, 8, 9], [4, 5, 6], [1, 2, 3], [0]];
+const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+const symbols = ['+', '-', 'X', '/', '=', 'C', '+/-', '%', '.', '='] as const;
+
+export type CalculatorSymbol =
+  | (typeof numbers)[number]
+  | (typeof symbols)[number];
+
+const rows: CalculatorSymbol[][] = [
+  ['C', '+/-', '%', '/'],
+  [7, 8, 9, 'X'],
+  [4, 5, 6, '-'],
+  [1, 2, 3, '+'],
+  [0, '.', '='],
+];
 
 export const Calculator = () => (
   <div>
@@ -7,7 +20,7 @@ export const Calculator = () => (
   </div>
 );
 
-const buttonRow = (row: number[]) => {
+const buttonRow = (row: CalculatorSymbol[]) => {
   return (
     <div role="row" key={row.toString()}>
       {row.map((n) => (

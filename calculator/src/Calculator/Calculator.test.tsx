@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { Calculator } from './Calculator';
 
 describe('<Calculator />', () => {
@@ -20,10 +19,21 @@ describe('<Calculator />', () => {
     });
   });
 
-  it('shows number buttons in 4 rows', () => {
+  it('shows all buttons in rows', () => {
     render(<Calculator />);
     const rows = screen.getAllByRole('row');
 
-    expect(rows.length).toEqual(4);
+    expect(rows.length).toEqual(5);
+  });
+
+  it('shows all operators as buttons', () => {
+    render(<Calculator />);
+    const operators = ['+', '-', 'X', '/', 'C', '+/-', '%', '=', '.'];
+
+    operators.forEach((operator) => {
+      const element = screen.getByText(operator);
+      expect(element).toBeInTheDocument();
+      expect(element.tagName).toMatch(/button/i);
+    });
   });
 });
