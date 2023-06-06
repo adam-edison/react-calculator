@@ -1,11 +1,22 @@
 import { useState } from 'react';
 
-const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
-const symbols = ['+', '-', 'X', '/', '=', 'C', '+/-', '%', '.', '='] as const;
+export const NumberValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
+export const SymbolValues = [
+  '+',
+  '-',
+  'X',
+  '/',
+  '=',
+  'C',
+  '+/-',
+  '%',
+  '.',
+  '=',
+] as const;
 
 export type CalculatorSymbol =
-  | (typeof numbers)[number]
-  | (typeof symbols)[number];
+  | (typeof NumberValues)[number]
+  | (typeof SymbolValues)[number];
 
 const rows: CalculatorSymbol[][] = [
   ['C', '+/-', '%', '/'],
@@ -18,7 +29,7 @@ const rows: CalculatorSymbol[][] = [
 const empty = '';
 
 export const Calculator = () => {
-  const [value, setValue] = useState(empty);
+  const [value, setValue] = useState<string>(empty);
 
   return (
     <div>
@@ -31,7 +42,11 @@ export const Calculator = () => {
   );
 };
 
-const buttonRow = (row: CalculatorSymbol[], value, setValue: Function) => {
+const buttonRow = (
+  row: CalculatorSymbol[],
+  value: string,
+  setValue: Function,
+) => {
   return (
     <div role="row" key={row.toString()}>
       {row.map((n) => (
@@ -50,7 +65,5 @@ export function handleClick(
   value: string,
   setValue: Function,
 ) {
-  if (symbol !== '=') {
-    setValue(value.concat(String(symbol)));
-  }
+  setValue(`${value}${symbol}`);
 }
