@@ -16,6 +16,12 @@ export const SymbolValues = [
 
 export type Operation = (typeof SymbolValues)[number];
 
+export const isOperation = (value: any): value is Operation =>
+  SymbolValues.includes(value);
+
+export const isNotOperation = (value: any): value is Operation =>
+  !isOperation(value);
+
 export type CalculatorSymbol =
   | (typeof NumberValues)[number]
   | (typeof SymbolValues)[number];
@@ -41,14 +47,12 @@ export const Calculator = () => {
       return;
     }
 
-    const isNumeric = /[0-9]/.test(String(symbol));
-
-    if (isNumeric && current === '0') {
+    if (isNotOperation(symbol) && current === '0') {
       setCurrent(`${symbol}`);
       return;
     }
 
-    if (isNumeric) {
+    if (isNotOperation(symbol)) {
       setCurrent(`${current}${symbol}`);
     }
   }
