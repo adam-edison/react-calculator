@@ -26,6 +26,8 @@ const rows: CalculatorSymbol[][] = [
   [0, '.', '='],
 ];
 
+// TODO: refactor in const case
+// TODO: add default value of '0' as constant
 const empty = '';
 
 export const Calculator = () => {
@@ -65,6 +67,11 @@ export function handleClick(
   value: string,
   setValue: Function,
 ) {
+  if (symbol === 'C') {
+    setValue('0');
+    return;
+  }
+
   const isNumeric = /[0-9]/.test(String(symbol));
 
   if (isNumeric && value === '0') {

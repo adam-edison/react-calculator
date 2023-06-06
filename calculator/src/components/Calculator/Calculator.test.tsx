@@ -110,4 +110,29 @@ describe('<Calculator />', () => {
       expect(calculated).toHaveValue('0');
     });
   });
+
+  it('resets the display to 0 when C (clear) is clicked', () => {
+    render(<Calculator />);
+    const sequence = ['3', 'C'];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0');
+  });
+  it.skip('can calculate a simple sum', () => {
+    render(<Calculator />);
+    const sequence = ['3', '+', '5', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('8');
+  });
 });
