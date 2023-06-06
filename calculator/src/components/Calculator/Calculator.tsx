@@ -31,14 +31,14 @@ const rows: CalculatorSymbol[][] = [
 const empty = '';
 
 export const Calculator = () => {
-  const [value, setValue] = useState<string>('0');
+  const [current, setCurrent] = useState<string>('0');
 
   return (
     <div>
       <h1>Calculator</h1>
-      <input type="text" value={value} role="presentation" disabled />
+      <input type="text" value={current} role="presentation" disabled />
       <div role="grid">
-        {rows.map((row) => buttonRow(row, value, setValue))}
+        {rows.map((row) => buttonRow(row, current, setCurrent))}
       </div>
     </div>
   );
@@ -46,15 +46,15 @@ export const Calculator = () => {
 
 const buttonRow = (
   row: CalculatorSymbol[],
-  value: string,
-  setValue: Function,
+  current: string,
+  setCurrent: Function,
 ) => {
   return (
     <div role="row" key={row.toString()}>
       {row.map((n) => (
         <button
           key={`button${n}`}
-          onClick={() => handleClick(n, value, setValue)}>
+          onClick={() => handleClick(n, current, setCurrent)}>
           {String(n)}
         </button>
       ))}
@@ -64,21 +64,21 @@ const buttonRow = (
 
 export function handleClick(
   symbol: CalculatorSymbol,
-  value: string,
-  setValue: Function,
+  current: string,
+  setCurrent: Function,
 ) {
   if (symbol === 'C') {
-    setValue('0');
+    setCurrent('0');
     return;
   }
 
   const isNumeric = /[0-9]/.test(String(symbol));
 
-  if (isNumeric && value === '0') {
-    value = empty;
+  if (isNumeric && current === '0') {
+    current = empty;
   }
 
   if (isNumeric) {
-    setValue(`${value}${symbol}`);
+    setCurrent(`${current}${symbol}`);
   }
 }
