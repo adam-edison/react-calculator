@@ -14,8 +14,16 @@ describe('<Calculator />', () => {
     numbers.forEach((number) => {
       const text = number.toString();
       const element = screen.getByText(text);
+
       expect(element).toBeInTheDocument();
       expect(element.tagName).toMatch(/button/i);
     });
+  });
+
+  it('shows number buttons in 4 rows', () => {
+    render(<Calculator />);
+    const rows = screen.getAllByRole('row');
+
+    expect(rows.length).toEqual(4);
   });
 });
