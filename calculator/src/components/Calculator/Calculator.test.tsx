@@ -150,6 +150,19 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('2');
   });
 
+  it('can calculate a simple subtraction when the result is negative', () => {
+    render(<Calculator />);
+    const sequence = ['5', '-', '9', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('-4');
+  });
+
   it('can calculate multiple additions', () => {
     render(<Calculator />);
     const sequence = ['3', '+', '5', '=', '+', '4', '='];
