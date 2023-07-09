@@ -176,6 +176,19 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('45');
   });
 
+  it('can calculate a simple division', () => {
+    render(<Calculator />);
+    const sequence = ['1', '/', '4', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0.25');
+  });
+
   it('can calculate multiple additions', () => {
     render(<Calculator />);
     const sequence = ['3', '+', '5', '=', '+', '4', '='];

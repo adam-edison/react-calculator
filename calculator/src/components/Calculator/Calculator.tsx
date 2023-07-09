@@ -67,6 +67,10 @@ function performCalculation(calculatorState: CalculatorState): Number {
     return Number(firstOperand) * Number(secondOperand);
   }
 
+  if (operation === '/') {
+    return Number(firstOperand) / Number(secondOperand);
+  }
+
   return 0;
 }
 
