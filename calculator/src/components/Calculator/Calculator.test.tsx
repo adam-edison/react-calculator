@@ -136,4 +136,17 @@ describe('<Calculator />', () => {
     const calculated = screen.getByRole('presentation');
     expect(calculated).toHaveValue('8');
   });
+
+  it('can calculate multiple additions', () => {
+    render(<Calculator />);
+    const sequence = ['3', '+', '5', '=', '+', '4', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('12');
+  });
 });

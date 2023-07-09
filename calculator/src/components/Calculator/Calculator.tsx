@@ -123,7 +123,7 @@ function handleCalculatorButtonPress(
     setCalculatorState({
       ...calculatorState,
       displayValue: `${result}`,
-      firstOperand: displayValue,
+      firstOperand: `${result}`,
       secondOperand: null,
     });
     return;
