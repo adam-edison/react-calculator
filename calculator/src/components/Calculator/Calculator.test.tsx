@@ -214,4 +214,21 @@ describe('<Calculator />', () => {
     const calculated = screen.getByRole('presentation');
     expect(calculated).toHaveValue('6');
   });
+
+  it('can calculate all four basic operations in sequence', () => {
+    render(<Calculator />);
+    // prettier-ignore
+    const sequence = ['3', '+', '5', '=', 
+    '-', '2', '=', 
+    'X', '1', '0', '0', '=', 
+    '/', '1', '0', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('60');
+  });
 });
