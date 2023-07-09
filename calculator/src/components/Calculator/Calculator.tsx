@@ -5,6 +5,7 @@ import {
   isNumericOperand,
   isOperation,
 } from './Calculator.types';
+import { ButtonRow } from './ButtonRow';
 
 const rows: CalculatorSymbol[][] = [
   ['C', '+/-', '%', '/'],
@@ -46,20 +47,7 @@ export const Calculator = () => {
         role="presentation"
         disabled
       />
-      <div role="grid">{rows.map((row) => buttonRow(row, handleClick))}</div>
-    </div>
-  );
-};
-
-/// TODO: maybe extract this as a separate component?
-const buttonRow = (row: CalculatorSymbol[], onClick: Function) => {
-  return (
-    <div role="row" key={row.toString()}>
-      {row.map((n) => (
-        <button key={`button${n}`} onClick={() => onClick(n)}>
-          {String(n)}
-        </button>
-      ))}
+      <div role="grid">{rows.map((row) => ButtonRow(row, handleClick))}</div>
     </div>
   );
 };
