@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Calculator, NumberValues, SymbolValues } from './Calculator';
+import { NumberValues, SymbolValues } from './Calculator.types';
+import { Calculator } from './Calculator';
 
 describe('<Calculator />', () => {
   it('shows number buttons 0-9', () => {
