@@ -108,9 +108,6 @@ describe('<Calculator />', () => {
       fireEvent.click(element);
 
       const calculated = screen.getByRole('presentation');
-
-      // @ts-ignore the HTMLElement type was not defined with 'value' even though it exists
-      console.log({ n, calculated: calculated.value });
       expect(calculated).toHaveValue('0');
     });
   });

@@ -53,7 +53,6 @@ export const Calculator = () => {
 };
 
 function performCalculation(calculatorState: CalculatorState): Number {
-  console.error('perform calculation', { calculatorState });
   const { firstOperand, secondOperand, operation } = calculatorState;
 
   if (operation === '+') {
