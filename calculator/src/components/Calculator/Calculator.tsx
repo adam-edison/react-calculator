@@ -59,6 +59,10 @@ function performCalculation(calculatorState: CalculatorState): Number {
     return Number(firstOperand) + Number(secondOperand);
   }
 
+  if (operation === '-') {
+    return Number(firstOperand) - Number(secondOperand);
+  }
+
   return 0;
 }
 
@@ -78,8 +82,7 @@ function handleCalculatorButtonPress(
   },
   symbol: CalculatorSymbol,
 ) {
-  let { displayValue, firstOperand, secondOperand, operation } =
-    calculatorState;
+  let { firstOperand, secondOperand, operation } = calculatorState;
 
   if (isOperation(symbol) && symbol === 'C') {
     setCalculatorState(initialCalculatorState);

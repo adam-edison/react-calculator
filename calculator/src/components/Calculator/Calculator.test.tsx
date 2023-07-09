@@ -137,6 +137,19 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('8');
   });
 
+  it('can calculate a simple subtraction', () => {
+    render(<Calculator />);
+    const sequence = ['5', '-', '3', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('2');
+  });
+
   it('can calculate multiple additions', () => {
     render(<Calculator />);
     const sequence = ['3', '+', '5', '=', '+', '4', '='];
