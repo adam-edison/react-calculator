@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 export const NumberValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 export const SymbolValues = [
@@ -55,61 +55,7 @@ export const Calculator = () => {
   );
 
   function handleClick(symbol: CalculatorSymbol) {
-    let { displayValue, firstOperand, secondOperand, operation } =
-      calculatorState;
-
-    if (isOperation(symbol) && symbol === 'C') {
-      setCalculatorState(initialCalculatorState);
-      return;
-    }
-
-    if (isNumericOperand(symbol) && !operation) {
-      firstOperand = handleEmptyOrZeroCase(firstOperand);
-      firstOperand = `${firstOperand}${symbol}`;
-
-      setCalculatorState({
-        ...calculatorState,
-        firstOperand,
-        displayValue: firstOperand,
-      });
-      return;
-    }
-
-    if (isOperation(symbol) && firstOperand && !secondOperand && !operation) {
-      setCalculatorState({
-        ...calculatorState,
-        operation: symbol,
-      });
-      return;
-    }
-
-    if (isNumericOperand(symbol) && firstOperand && operation) {
-      secondOperand = handleEmptyOrZeroCase(secondOperand);
-      secondOperand = `${secondOperand}${symbol}`;
-
-      setCalculatorState({
-        ...calculatorState,
-        secondOperand,
-        displayValue: secondOperand,
-      });
-      return;
-    }
-
-    if (
-      isOperation(symbol) &&
-      symbol === '=' &&
-      firstOperand &&
-      secondOperand
-    ) {
-      const result = performCalculation(calculatorState);
-      setCalculatorState({
-        ...calculatorState,
-        displayValue: `${result}`,
-        firstOperand: displayValue,
-        secondOperand: null,
-      });
-      return;
-    }
+    handleCalculatorButtonPress(calculatorState, setCalculatorState, symbol);
   }
 
   return (
@@ -156,4 +102,64 @@ function handleEmptyOrZeroCase(operand: string | null) {
   }
 
   return operand;
+}
+
+function handleCalculatorButtonPress(
+  calculatorState: CalculatorState,
+  setCalculatorState: {
+    (value: SetStateAction<CalculatorState>): void;
+    (arg0: CalculatorState): void;
+  },
+  symbol: CalculatorSymbol,
+) {
+  let { displayValue, firstOperand, secondOperand, operation } =
+    calculatorState;
+
+  if (isOperation(symbol) && symbol === 'C') {
+    setCalculatorState(initialCalculatorState);
+    return;
+  }
+
+  if (isNumericOperand(symbol) && !operation) {
+    firstOperand = handleEmptyOrZeroCase(firstOperand);
+    firstOperand = `${firstOperand}${symbol}`;
+
+    setCalculatorState({
+      ...calculatorState,
+      firstOperand,
+      displayValue: firstOperand,
+    });
+    return;
+  }
+
+  if (isOperation(symbol) && firstOperand && !secondOperand && !operation) {
+    setCalculatorState({
+      ...calculatorState,
+      operation: symbol,
+    });
+    return;
+  }
+
+  if (isNumericOperand(symbol) && firstOperand && operation) {
+    secondOperand = handleEmptyOrZeroCase(secondOperand);
+    secondOperand = `${secondOperand}${symbol}`;
+
+    setCalculatorState({
+      ...calculatorState,
+      secondOperand,
+      displayValue: secondOperand,
+    });
+    return;
+  }
+
+  if (isOperation(symbol) && symbol === '=' && firstOperand && secondOperand) {
+    const result = performCalculation(calculatorState);
+    setCalculatorState({
+      ...calculatorState,
+      displayValue: `${result}`,
+      firstOperand: displayValue,
+      secondOperand: null,
+    });
+    return;
+  }
 }
