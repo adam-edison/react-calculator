@@ -97,6 +97,28 @@ function handleCalculatorButtonPress(
     return;
   }
 
+  if (isOperation(symbol) && symbol === '.' && !operation) {
+    firstOperand = `${firstOperand}${symbol}`;
+
+    setCalculatorState({
+      ...calculatorState,
+      firstOperand,
+      displayValue: firstOperand,
+    });
+    return;
+  }
+
+  if (isOperation(symbol) && symbol === '.' && operation) {
+    secondOperand = `${secondOperand}${symbol}`;
+
+    setCalculatorState({
+      ...calculatorState,
+      firstOperand,
+      displayValue: secondOperand,
+    });
+    return;
+  }
+
   if (isNumericOperand(symbol) && !operation) {
     firstOperand = handleEmptyOrZeroCase(firstOperand);
     firstOperand = `${firstOperand}${symbol}`;

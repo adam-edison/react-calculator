@@ -1,5 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { NumberValues, SymbolValues } from './Calculator.types';
+import {
+  CalculatorSymbol,
+  NumberValues,
+  SymbolValues,
+} from './Calculator.types';
 import { Calculator } from './Calculator';
 
 describe('<Calculator />', () => {
@@ -96,7 +100,7 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('0');
   });
 
-  it('does not display an operation when clicked', () => {
+  it('does not display an operation when clicked, except for decimal', () => {
     render(<Calculator />);
 
     // OK with coupling here
@@ -105,7 +109,10 @@ describe('<Calculator />', () => {
 
     operations.forEach((n) => {
       const element = screen.getByText(n);
-      fireEvent.click(element);
+
+      if (n !== '.') {
+        fireEvent.click(element);
+      }
 
       const calculated = screen.getByRole('presentation');
       expect(calculated).toHaveValue('0');
@@ -230,5 +237,57 @@ describe('<Calculator />', () => {
 
     const calculated = screen.getByRole('presentation');
     expect(calculated).toHaveValue('60');
+  });
+
+  it('can display properly with a decimal point after 0', () => {
+    render(<Calculator />);
+    const sequence: CalculatorSymbol[] = [0, '.', 5, 4, 3];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0.543');
+  });
+
+  it('can display properly with a decimal point with implied 0', () => {
+    render(<Calculator />);
+    const sequence: CalculatorSymbol[] = [0, '.', 5, 4, 3];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0.543');
+  });
+
+  it('can display properly with implied 0 and a 0 after the decimal point', () => {
+    render(<Calculator />);
+    const sequence: CalculatorSymbol[] = ['.', 0, 4, 3];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0.043');
+  });
+
+  it.skip('can calculate decimal multiplication', () => {
+    render(<Calculator />);
+    const sequence: CalculatorSymbol[] = [0, '.', 5, 'X', 0, '.', 1];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('0.05');
   });
 });
