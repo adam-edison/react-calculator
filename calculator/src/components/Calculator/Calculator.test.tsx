@@ -107,6 +107,9 @@ describe('<Calculator />', () => {
       fireEvent.click(element);
 
       const calculated = screen.getByRole('presentation');
+
+      // @ts-ignore the HTMLElement type was not defined with 'value' even though it exists
+      console.log({ n, calculated: calculated.value });
       expect(calculated).toHaveValue('0');
     });
   });
@@ -123,7 +126,7 @@ describe('<Calculator />', () => {
     const calculated = screen.getByRole('presentation');
     expect(calculated).toHaveValue('0');
   });
-  it.skip('can calculate a simple sum', () => {
+  it('can calculate a simple addition', () => {
     render(<Calculator />);
     const sequence = ['3', '+', '5', '='];
 

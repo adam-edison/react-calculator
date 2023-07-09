@@ -15,12 +15,13 @@ export const SymbolValues = [
 ] as const;
 
 export type Operation = (typeof SymbolValues)[number];
+export type NumericOperand = (typeof NumberValues)[number];
 
 export const isOperation = (value: any): value is Operation =>
   SymbolValues.includes(value);
 
-export const isNotOperation = (value: any): value is Operation =>
-  !isOperation(value);
+export const isNumericOperand = (value: any): value is NumericOperand =>
+  NumberValues.includes(value);
 
 export type CalculatorSymbol =
   | (typeof NumberValues)[number]
@@ -34,33 +35,92 @@ const rows: CalculatorSymbol[][] = [
   [0, '.', '='],
 ];
 
-// TODO: refactor in const case
-// TODO: add default value of '0' as constant
-const empty = '';
+export interface CalculatorState {
+  displayValue: string;
+  firstOperand: string | null;
+  secondOperand: string | null;
+  operation: Operation | null;
+}
+
+const initialCalculatorState: CalculatorState = {
+  displayValue: '0',
+  firstOperand: null,
+  secondOperand: null,
+  operation: null,
+};
 
 export const Calculator = () => {
-  const [current, setCurrent] = useState<string>('0');
+  const [calculatorState, setCalculatorState] = useState<CalculatorState>(
+    initialCalculatorState,
+  );
 
   function handleClick(symbol: CalculatorSymbol) {
-    if (symbol === 'C') {
-      setCurrent('0');
+    let { displayValue, firstOperand, secondOperand, operation } =
+      calculatorState;
+
+    if (isOperation(symbol) && symbol === 'C') {
+      setCalculatorState(initialCalculatorState);
       return;
     }
 
-    if (isNotOperation(symbol) && current === '0') {
-      setCurrent(`${symbol}`);
+    if (isNumericOperand(symbol) && !operation) {
+      firstOperand = handleEmptyOrZeroCase(firstOperand);
+      firstOperand = `${firstOperand}${symbol}`;
+
+      setCalculatorState({
+        ...calculatorState,
+        firstOperand,
+        displayValue: firstOperand,
+      });
       return;
     }
 
-    if (isNotOperation(symbol)) {
-      setCurrent(`${current}${symbol}`);
+    if (isOperation(symbol) && firstOperand && !secondOperand && !operation) {
+      setCalculatorState({
+        ...calculatorState,
+        operation: symbol,
+      });
+      return;
+    }
+
+    if (isNumericOperand(symbol) && firstOperand && operation) {
+      secondOperand = handleEmptyOrZeroCase(secondOperand);
+      secondOperand = `${secondOperand}${symbol}`;
+
+      setCalculatorState({
+        ...calculatorState,
+        secondOperand,
+        displayValue: secondOperand,
+      });
+      return;
+    }
+
+    if (
+      isOperation(symbol) &&
+      symbol === '=' &&
+      firstOperand &&
+      secondOperand
+    ) {
+      const result = performCalculation(calculatorState);
+      setCalculatorState({
+        ...calculatorState,
+        displayValue: `${result}`,
+        firstOperand: displayValue,
+        secondOperand: null,
+      });
+      return;
     }
   }
 
   return (
     <div>
       <h1>Calculator</h1>
-      <input type="text" value={current} role="presentation" disabled />
+      <input
+        type="text"
+        value={calculatorState.displayValue}
+        role="presentation"
+        disabled
+      />
       <div role="grid">{rows.map((row) => buttonRow(row, handleClick))}</div>
     </div>
   );
@@ -78,3 +138,22 @@ const buttonRow = (row: CalculatorSymbol[], onClick: Function) => {
     </div>
   );
 };
+
+function performCalculation(calculatorState: CalculatorState): Number {
+  console.error('perform calculation', { calculatorState });
+  const { firstOperand, secondOperand, operation } = calculatorState;
+
+  if (operation === '+') {
+    return Number(firstOperand) + Number(secondOperand);
+  }
+
+  return 0;
+}
+
+function handleEmptyOrZeroCase(operand: string | null) {
+  if (operand === null || operand === '0') {
+    return '';
+  }
+
+  return operand;
+}
