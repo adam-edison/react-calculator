@@ -136,6 +136,7 @@ function handleCalculatorButtonPress(
       displayValue: `${result}`,
       firstOperand: `${result}`,
       secondOperand: null,
+      operation: null,
     });
     return;
   }

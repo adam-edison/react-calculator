@@ -201,4 +201,17 @@ describe('<Calculator />', () => {
     const calculated = screen.getByRole('presentation');
     expect(calculated).toHaveValue('12');
   });
+
+  it('can calculate addition followed by subtraction', () => {
+    render(<Calculator />);
+    const sequence = ['3', '+', '5', '=', '-', '2', '='];
+
+    sequence.forEach((step) => {
+      const element = screen.getByText(step);
+      fireEvent.click(element);
+    });
+
+    const calculated = screen.getByRole('presentation');
+    expect(calculated).toHaveValue('6');
+  });
 });
