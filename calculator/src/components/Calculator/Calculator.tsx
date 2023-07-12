@@ -55,20 +55,24 @@ export const Calculator = () => {
 function performCalculation(calculatorState: CalculatorState): Number {
   const { firstOperand, secondOperand, operation } = calculatorState;
 
+  // TODO: probably decimals are failing calculations due to Number parsing... try parseFloat instead
+  const a = parseFloat(firstOperand ?? '0');
+  const b = parseFloat(secondOperand ?? '0');
+
   if (operation === '+') {
-    return Number(firstOperand) + Number(secondOperand);
+    return a + b;
   }
 
   if (operation === '-') {
-    return Number(firstOperand) - Number(secondOperand);
+    return a - b;
   }
 
   if (operation === 'X') {
-    return Number(firstOperand) * Number(secondOperand);
+    return a * b;
   }
 
   if (operation === '/') {
-    return Number(firstOperand) / Number(secondOperand);
+    return a / b;
   }
 
   return 0;
@@ -98,6 +102,10 @@ function handleCalculatorButtonPress(
   }
 
   if (isOperation(symbol) && symbol === '.' && !operation) {
+    // handle decimal as first button press
+    firstOperand = firstOperand === null ? '0' : firstOperand;
+
+    // append decimal point
     firstOperand = `${firstOperand}${symbol}`;
 
     setCalculatorState({

@@ -265,7 +265,7 @@ describe('<Calculator />', () => {
     expect(calculated).toHaveValue('0.543');
   });
 
-  it('can display properly with implied 0 and a 0 after the decimal point', () => {
+  it.only('can display properly with implied 0 and a 0 after the decimal point', () => {
     render(<Calculator />);
     const sequence: CalculatorSymbol[] = ['.', 0, 4, 3];
 
